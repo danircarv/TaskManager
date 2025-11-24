@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: taskmanager
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5433:5432" 
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Serviço backend (Nest) - comentado por enquanto.
+  # Quando estiver pronto, descomente e ajuste build/context se mudar a estrutura.
+  #
+  # backend:
+  #   build:
+  #     context: ./taskmanager-back
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   environment:
+  #     NODE_ENV: development
+  #     DATABASE_URL: "postgresql://postgres:password@db:5432/taskmanager?schema=public"
+  #   depends_on:
+  #     db:
+  #       condition: service_healthy
+  #   ports:
+  #     - "3000:3000"
+  #   # Em desenvolvimento você pode montar o código para hot-reload:
+  #   # volumes:
+  #   #   - ./taskmanager-back:/app
+  #   # command: npm run start:dev
+
+  # Serviço frontend (Vite+React) - comentado por enquanto.
+  #
+  # frontend:
+  #   build:
+  #     context: ./taskmanager-front
+  #     dockerfile: Dockerfile
+  #   restart: unless-stopped
+  #   ports:
+  #     - "5173:5173"
+  #   # Em dev, monte a pasta e execute npm run dev:
+  #   # volumes:
+  #   #   - ./taskmanager-front:/app
+  #   # command: npm run dev -- --host 0.0.0.0
+
+# Volume persistente para o Postgres
+volumes:
+  pgdata:
