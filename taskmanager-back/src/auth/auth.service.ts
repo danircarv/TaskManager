@@ -1,5 +1,5 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { LoginDto } from './dto/login.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import * as bcrypt from 'bcryptjs';
 import { PrismaService } from '../prisma/prisma.service';
@@ -10,8 +10,8 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService, private readonly jwtService: JwtService) {}
 
   
-  async login(createAuthDto: CreateAuthDto) {
-    const { email, password } = createAuthDto;
+  async login(loginDto: LoginDto) {
+    const { email, password } = loginDto;
 
     const user = await this.prisma.user.findUnique({ where: { email } });
 

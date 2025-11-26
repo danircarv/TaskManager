@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateAuthDto } from './dto/create-auth.dto';
+import { LoginDto } from './dto/login.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
 
@@ -11,11 +11,11 @@ export class AuthController {
 
   @Post('login')
   @ApiOperation({ summary: 'Login' })
-  @ApiBody({ type: CreateAuthDto })
+  @ApiBody({ type: LoginDto })
   @ApiResponse({ status: 200, description: 'OK', schema: { properties: { access_token: { type: 'string' } } } })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  login(@Body() createAuthDto: CreateAuthDto) {
-    return this.authService.login(createAuthDto);
+  login(@Body() loginDto: LoginDto) {
+    return this.authService.login(loginDto);
   }
 
   
